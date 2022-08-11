@@ -1,5 +1,6 @@
 package com.example.bootstudy.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +15,7 @@ import com.example.bootstudy.service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -22,18 +24,11 @@ import java.util.Set;
 
 public class AdminController {
 
-
-    @GetMapping(value="/login")
-    public  String getLoginPage() {
-        System.out.println("Log::");
-        return "login";
-    }
-
     private final UserService userService;
     private final UserDetailsService userDetailsService;
     private final RoleService roleService;
 
-
+    @Autowired
     public AdminController(UserService userService, UserDetailsService userDetailsService,
                            RoleService roleService) {
 
@@ -42,22 +37,23 @@ public class AdminController {
         this.roleService = roleService;
     }
 
+
     @GetMapping("/admin")
     public String getUsers(Model model,@AuthenticationPrincipal UserDetails logedInUser) {
 
         User user = (User) userDetailsService.loadUserByUsername(logedInUser.getUsername());
-        System.out.println("ID: " +user.getId() +" " +user.toString() +"roles: "+ user.getRoles());
-        model.addAttribute("loggedInUser",user);
+        System.out.println("ID: " + user.getId() + " " + user.toString() + "roles: " + user.getRoles());
+        model.addAttribute("loggedInUser", user);
 
-        model.addAttribute("new_user",new User());
+        model.addAttribute("new_user", new User());
 
 
-        model.addAttribute("usersSet",userService.getAll());
-        model.addAttribute("RolesSet",roleService.getAllRoles());
+        model.addAttribute("usersSet", userService.getAll());
+        model.addAttribute("RolesSet", roleService.getAllRoles());
         return "admins_pages/listBS";
-//        return "admins_pages/заметки 2_1";
-
     }
+
+
 
 
     @PostMapping(value="/saveUser")
@@ -91,24 +87,6 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-//    @PostMapping("/delete/") //типо тут можно попробовать с requestparam вместо pathvariable
-//    public String delete(@ModelAttribute("user") User user,@RequestParam(value="idDelete") Long id){
-//       // model.addAttribute("idDelete",id);
-//        System.out.println("User with id " +  user.getId());
-//        user=userService.getUserById(id);
-//        userService.deleteUser(user);
-//        return "redirect:/admin";
-//    }
-
-    //Code for user's page
-    @GetMapping("/user")
-    public String showUserPage(Model model,
-                               @AuthenticationPrincipal UserDetails logedInUser) {
-
-        User user = (User) userDetailsService.loadUserByUsername(logedInUser.getUsername());
-        model.addAttribute("loggedInUser",user);
-        return  "userPage";
-
-    }
+//
 
 }
