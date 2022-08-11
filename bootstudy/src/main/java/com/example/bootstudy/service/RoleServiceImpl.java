@@ -67,7 +67,7 @@ public class RoleServiceImpl  implements  RoleService{
 
     @Override
         public Set<Role> getRolesByIds(Long[] ids) {
-        //Set<Role> roles =new HashSet<>();
+
        Set<Role> rolesList= new HashSet();
         for (Long id:ids) {
             rolesList.add((getRoleById(id)));
