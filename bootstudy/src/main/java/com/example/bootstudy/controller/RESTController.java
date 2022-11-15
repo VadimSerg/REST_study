@@ -41,14 +41,14 @@ public class RESTController {
 
     }
 
-    @GetMapping("/users")
-    public ModelAndView getUsers(ModelAndView modelAndView ) {
-        List<Role> rolesList = roleService.getAllRoles();
-        modelAndView.setViewName("./admins_pages/listBS2");
-        modelAndView.addObject("roleSet",rolesList);
-
-        return modelAndView;
-    }
+//    @GetMapping("/users")
+//    public ModelAndView getUsers(ModelAndView modelAndView ) {
+//        List<Role> rolesList = roleService.getAllRoles();
+//        modelAndView.setViewName("./admins_pages/listBS2");
+//        modelAndView.addObject("roleSet",rolesList);
+//
+//        return modelAndView;
+//    }
 
 
 
