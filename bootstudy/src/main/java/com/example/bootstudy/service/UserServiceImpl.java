@@ -1,5 +1,6 @@
 package com.example.bootstudy.service;
 
+import com.zaxxer.hikari.HikariConfig;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,10 +61,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void update(User user) {
+    public User update(User user) {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userDao.update(user);
+       return userDao.update(user);
 
     }
 
@@ -78,6 +79,10 @@ public class UserServiceImpl implements UserService {
        userDao.delete(user);
     }
 
+    @Override
+    public User update(Long id) {
+        return userDao.update(userDao.getUserById(id));
+    }
 
 
 }

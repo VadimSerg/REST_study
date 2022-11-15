@@ -1,13 +1,18 @@
 package com.example.bootstudy.controller;
 
+import com.example.bootstudy.model.Role;
 import com.example.bootstudy.model.User;
 import com.example.bootstudy.service.RoleService;
 import com.example.bootstudy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpOutputMessage;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -26,32 +31,79 @@ public class RESTController {
         this.roleService = roleService;
     }
 
-//
+
     @GetMapping("/users")
-    public List<User> getUsers() {
-        List<User> allUsers = userService.getAll();
-        return allUsers;
+    public ResponseEntity< List<User>> getUsers() {
+        final List<User> allUsers = userService.getAll();
+        return allUsers!=null && !allUsers.isEmpty() ?
+                new ResponseEntity<>(allUsers, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 
+    @GetMapping("/users")
+    public ModelAndView getUsers(ModelAndView modelAndView ) {
+        List<Role> rolesList = roleService.getAllRoles();
+        modelAndView.setViewName("./admins_pages/listBS2");
+        modelAndView.addObject("roleSet",rolesList);
+
+        return modelAndView;
+    }
+
+
+
+
 
     @GetMapping("/users/{id}")
-    @ResponseBody
-    public User getUserById(@PathVariable("id") Long id) {
-         User user = userService.getUserById(id);
-         return user;
+    @CrossOrigin
+    public ResponseEntity<?>  getUserById(@RequestBody User user,@PathVariable("id") Long id) {
+
+        user = userService.getUserById(id);
+        if (user==null) {
+            System.out.println("USER'S NOT FOUND");
+        }
+            return (user==null) ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+            new ResponseEntity<>( user , HttpStatus.OK );
+
     }
 
 
 
     @PostMapping("/users")
-    public void addNewUser(@RequestBody User user) {
-
+    public ResponseEntity<?> addNewUser(@RequestBody User user) {
 
         userService.saveUser(user);
+        System.out.println("USER'S SAVED SUCCESSFULLY");
+        return new ResponseEntity<>(user,HttpStatus.CREATED);
 
     }
 
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable("id") Long id) {
+
+
+
+
+        if(userService.getUserById(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        user.setId(id);
+        userService.update(user);
+        System.out.println("USER'S CHANGED SUCCESSUllY");
+        return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+    }
+
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@RequestBody User user, @PathVariable("id") Long id ) {
+        user = userService.getUserById(id);
+            if(user == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
+        userService.deleteUser(user);
+        System.out.println("User WAS REMOVED");
+        return new ResponseEntity<>(user, HttpStatus.OK);
+
+    }
 
 
 
@@ -65,6 +117,8 @@ public class RESTController {
 
 //
 ////    Code for user's page
+
+    
     @GetMapping("/user")
     public User showUser(@AuthenticationPrincipal UserDetails logedInUser) {
 
@@ -73,6 +127,8 @@ public class RESTController {
         return  user;
 
     }
+
+
 
 
 

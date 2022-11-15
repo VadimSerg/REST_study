@@ -2,6 +2,7 @@ package com.example.bootstudy.model;
 
 import com.example.bootstudy.model.Role ;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -95,8 +96,17 @@ public class User implements UserDetails {
         this.city = city;
     }
 
+    public User(Long id, @NotBlank(message = "Don't forget to input name") String username, @NotBlank(message = "Dont forget to input surname") String surname, @Min(0) @Max(120) @NotNull(message = "Age should be greater than 0") Integer age, @NotBlank(message = "city shouldn't be empty") String city, @NotBlank(message = "password shouldn't be empty") String password, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.surname = surname;
+        this.age = age;
+        this.city = city;
+        this.password = password;
+        this.roles = roles;
+    }
 
-    public User( String username, String surname, Integer age, String city, Set<Role> roles) {
+    public User(String username, String surname, Integer age, String city, Set<Role> roles) {
         this.username = username;
         this.surname = surname;
         this.age = age;
@@ -163,15 +173,15 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
-//        Set<SimpleGrantedAuthority> grantedAuthorities = new HashSet<>();
-//        for (Role role:roles) {
-//            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-//        }
-//
-//
-//        return grantedAuthorities;
+        Set<SimpleGrantedAuthority> grantedAuthorities = new HashSet<>();
+        for (Role role:roles) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+        }
 
-        return  getRoles();
+
+        return grantedAuthorities;
+
+       // return  getRoles();
     }
 
     @Override

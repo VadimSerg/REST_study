@@ -4,9 +4,9 @@ import com.example.bootstudy.model.User;
 
 import java.util.List;
 
-public interface UserService
+public interface UserService   {
 //        extends UserDetailsService
-                                        {
+
 
     void saveUser(User user);
 
@@ -14,10 +14,12 @@ public interface UserService
 
     User getUserById(Long id);
 
-    void  update(User user);
+    User update(User user);
 
     void deleteUserById(Long id);
     void deleteUser(User user);
+
+    User update(Long id);
 
 
 }
