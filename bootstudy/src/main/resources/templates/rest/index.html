@@ -1,13 +1,11 @@
-<html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self';"/>
     <title>Index</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-
     <style>
         .center-text {
             height: 3em;
@@ -21,7 +19,11 @@
             box-sizing: border-box;
         }
     </style>
+
+    <script src="../../static/index.js"></script>
+
 </head>
+
 <body>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -36,8 +38,10 @@
 <div class="row" style="background-color: black">
     <div class="col">
         <div class="container">
-            <div class="center-text"><p class="text-white">
-                <strong>admin@mail.ru</strong> with roles: ADMIN USER</p>
+            <div class="center-text">
+                <p class="text-white">
+                    <strong>admin@mail.ru</strong> with roles: ADMIN USER
+                </p>
             </div>
         </div>
     </div>
@@ -148,8 +152,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous">
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
 </script>
 
 <script>
@@ -159,19 +162,8 @@
 
 </script>
 
-<script src="list.js"></script>
-<script src="edit.js"></script>
-<script src="delete.js"></script>
-<script src="new.js"></script>
-<!--<div th:each="user : ${user}">-->
-<!--    <a th:href="@{/admin/{id}(id=${user.getId()})}"-->
-<!--       th:text="${user.getId()+', '+user.getName() +', '+user.getName()+', ' + user.getAge()+user.getEmail()+user.getRoles()}">user</a>-->
-<!--</div>-->
-<!--<br/>-->
-<!--<hr/>-->
-<!--<a href="/admin/new">Create new user</a></br>-->
-<!--<a href="/logout">LOGOUT</a>-->
-<!--<h1>fffffffffffffffff</h1>-->
+<script src="index.js"></script>
 
 </body>
+
 </html>

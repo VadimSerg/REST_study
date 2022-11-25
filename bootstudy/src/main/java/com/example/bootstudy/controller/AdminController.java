@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
-//@RestController   //почему страница не полностью  отображается
 @RequestMapping("/")
 
 public class AdminController {

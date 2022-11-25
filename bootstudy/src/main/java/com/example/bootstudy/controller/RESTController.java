@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:8060")
 @RestController
 @RequestMapping("api")
 public class RESTController {
@@ -33,10 +33,12 @@ public class RESTController {
 
 
     @GetMapping("/users")
+    @CrossOrigin
     public ResponseEntity< List<User>> getUsers() {
+       // List<Role> rolesList = roleService.getAllRoles();
         final List<User> allUsers = userService.getAll();
         return allUsers!=null && !allUsers.isEmpty() ?
-                new ResponseEntity<>(allUsers, HttpStatus.OK) :
+                new ResponseEntity<>(allUsers,HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
@@ -55,7 +57,7 @@ public class RESTController {
 
 
     @GetMapping("/users/{id}")
-    @CrossOrigin
+  //  @CrossOrigin
     public ResponseEntity<?>  getUserById(@RequestBody User user,@PathVariable("id") Long id) {
 
         user = userService.getUserById(id);
