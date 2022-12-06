@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="war" name="bootstudy:war">
-    <output-path>$PROJECT_DIR$/bootstudy/target</output-path>
+    <output-path>$PROJECT_DIR$/restStudy/target</output-path>
     <properties id="maven-jee-properties">
       <options>
         <module>bootstudy</module>
