@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 //@CrossOrigin(origins = "http://localhost:8060")
 @RestController
-@RequestMapping("api")
+@RequestMapping()
 public class RESTController {
 
     private final UserService userService;
@@ -31,7 +31,7 @@ public class RESTController {
     }
 
     @CrossOrigin
-    @GetMapping("/users")
+    @GetMapping("admin/users")
 
     public ResponseEntity< List<User>> getUsers() {
        // List<Role> rolesList = roleService.getAllRoles();
@@ -55,7 +55,7 @@ public class RESTController {
 
 
 
-    @GetMapping("/users/{id}")
+    @GetMapping("admin/users/{id}")
   //  @CrossOrigin
     public ResponseEntity<?>  getUserById(@RequestBody User user,@PathVariable("id") Long id) {
 
@@ -70,7 +70,7 @@ public class RESTController {
 
 
 
-    @PostMapping("/users")
+    @PostMapping("admin/users")
     public ResponseEntity<?> addNewUser(@RequestBody User user) {
 
         userService.saveUser(user);
