@@ -11,10 +11,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
 import java.util.List;
-//@CrossOrigin(origins = "http://localhost:8060")
+
 @RestController
 @RequestMapping()
 public class RESTController {
@@ -34,7 +32,6 @@ public class RESTController {
     @GetMapping("admin/users")
 
     public ResponseEntity< List<User>> getUsers() {
-       // List<Role> rolesList = roleService.getAllRoles();
         final List<User> allUsers = userService.getAll();
         return allUsers!=null && !allUsers.isEmpty() ?
                 new ResponseEntity<>(allUsers,HttpStatus.OK) :
@@ -42,24 +39,23 @@ public class RESTController {
 
     }
 
-//    @GetMapping("/users")
-//    public ModelAndView getUsers(ModelAndView modelAndView ) {
-//        List<Role> rolesList = roleService.getAllRoles();
-//        modelAndView.setViewName("./listBS");
-//        modelAndView.addObject("roleSet",rolesList);
-//
-//        return modelAndView;
-//    }
 
+    @GetMapping("admin/roles")
+    public ResponseEntity< List<Role>> getRoles() {
+        final List <Role> allRoles= roleService.getAllRoles();
+        return allRoles!=null && !allRoles.isEmpty() ?
+                new ResponseEntity<>(allRoles,HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
 
 
 
     @GetMapping("admin/users/{id}")
-  //  @CrossOrigin
-    public ResponseEntity<?>  getUserById(@RequestBody User user,@PathVariable("id") Long id) {
-
-        user = userService.getUserById(id);
+    @CrossOrigin
+    public ResponseEntity<?>  getUserById(@PathVariable("id") Long id) {
+//c @RequestBody User user этот код ломается
+       User user = userService.getUserById(id);
         if (user==null) {
             System.out.println("USER'S NOT FOUND");
         }
@@ -80,12 +76,8 @@ public class RESTController {
     }
 
 
-    @PutMapping("/users/{id}")
+    @PutMapping("admin/update/users/{id}")
     public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable("id") Long id) {
-
-
-
-
         if(userService.getUserById(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -96,9 +88,9 @@ public class RESTController {
     }
 
 
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<?> deleteUser(@RequestBody User user, @PathVariable("id") Long id ) {
-        user = userService.getUserById(id);
+    @DeleteMapping("admin/delete/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id ) {
+        User user = userService.getUserById(id);
             if(user == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
         userService.deleteUser(user);
         System.out.println("User WAS REMOVED");
@@ -109,28 +101,11 @@ public class RESTController {
 
 
 
-
-
-
-
-
-
-
-//
-////    Code for user's page
-
-    
-    @GetMapping("/user")
-    public User showUser(@AuthenticationPrincipal UserDetails logedInUser) {
-
-        User user = (User) userDetailsService.loadUserByUsername(logedInUser.getUsername());
-
-        return  user;
-
+    @GetMapping("/user/auth")
+    public ResponseEntity<?> showUser(@AuthenticationPrincipal UserDetails loggedInUser) {
+        User user = (User) userDetailsService.loadUserByUsername(loggedInUser.getUsername());
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
-
-
-
 
 
 }

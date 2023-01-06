@@ -1,6 +1,6 @@
 $(async function () {
     await getAuthUser();
-    await getAllUser();
+    await getAllUsers();
     await newUser();
     removeUser();
     updateUser();
@@ -10,39 +10,69 @@ $(async function () {
 async function getAuthUser() {
     fetch("http://localhost:8060/user/auth")
         .then(response => response.json())
-        .then(data => {
-            $('#userMail').append(data.city);
-            $('#userRole').append(data.role[0].roleName.substring(5));
+        .then(fieldUser => {
+
+
+            let authorities=[];
+            for (let i = 0; i < fieldUser.roles.length; i++ ) {
+               authorities.push(fieldUser.roles[i].roleName.substring(0));
+            }
+            let listAuthorities = authorities.join("; ");
+
+
+           $('#userName').append(fieldUser.username);
+         //  $('#userRole').append(fieldUser.roles[0].roleName.substring(0)+ "; "+ fieldUser.roles[1].roleName.substring(0));
+
+
+            // const arr =Array.of(fieldUser.roles.roleName.substring(0));
+            $('#userRole').append(listAuthorities);
+
+
+
+
             let user = `$(
             <tr class="fs-5">
-                <td>${data.id}</td>
-                <td>${data.username}</td>
-                <td>${data.surname}</td>
-                <td>${data.age}</td>
-                <td>${data.city}</td>
-                <td>${data.stringRole}</td>)`;
+                <td>${fieldUser.id}</td>
+                <td>${fieldUser.username}</td>
+                <td>${fieldUser.surname}</td>
+                <td>${fieldUser.age}</td>
+                <td>${fieldUser.city}</td>
+                <td>${listAuthorities}</td>)`;
             $('#userTable').append(user);
         })
         .catch(error => console.log(error))
 }
 
-async function getAllUser() {
+async function getAllUsers() {
     const table = $('#usersTable');
     table.empty();
     fetch("http://localhost:8060/admin/users")
         .then(response => response.json())
         .then(dataUsers => {
             dataUsers.forEach(user => {
+
+                let rolesArr = [];
+                for (let i = 0; i < user.roles.length; i++) {
+                    rolesArr.push(user.roles[i].roleName.substring(0));
+                }
+                let rolesList = rolesArr.join("; ");
+
                 let usersTable = `$(
                 <tr class="fs-5">
                     <td>${user.id}</td>
                     <td>${user.username}</td>
-                    <td>${user.username}</td>
+                    <td>${user.surname}</td>
                     <td>${user.age}</td>
                     <td>${user.city}</td>
-                    <td>${user.roleName}</td>)
+                   
+                   <td>
+                                <div>
+                                    <span class="text-uppercase">${rolesList}</span>
+                                </div>
+                            </td>
                     <td>
-                        <button class="btn btn-info text-white" type="button" data-userid="${user.id}" data-action="Edit" 
+                        
+                        <button class="btn btn-info text-white" type="button" data-userid="${user.id}" data-action="Edit"
                                 data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
                     </td>
                     <td>
@@ -57,7 +87,7 @@ async function getAllUser() {
 }
 
 async function getUser(id) {
-    let url = "http://localhost:8060/admin/" + id;
+    let url = "http://localhost:8060/admin/users/" + id;
     let response = await fetch(url);
     return await response.json();
 }
@@ -69,7 +99,7 @@ async function getRolesOption() {
             roles.forEach(role => {
                 let el = document.createElement("option");
                 el.value = role.id;
-                el.text = role.roleName.substring(5);
+                el.text = role.roleName.substring(0);
                 $('#selectNewRoles')[0].appendChild(el);
             })
         })
@@ -92,22 +122,22 @@ async function newUser() {
             })
         }
 
-        fetch("http://localhost:8060/admin/all", {
+        fetch("http://localhost:8060/admin/users", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                firstName: form.firstName.value,
-                lastName: form.lastName.value,
+                username: form.username.value,
+                surname: form.surname.value,
                 age: form.age.value,
-                email: form.email.value,
+                city: form.city.value,
                 password: form.password.value,
-                role: newUserRoles
+                roles: newUserRoles
             })
         }).then(() => {
                 form.reset();
-                getAllUser();
+                getAllUsers();
                 $(`.nav-tabs a[href="#nav-home"]`).tab("show");
             })
     }
@@ -117,13 +147,13 @@ function removeUser(){
     const deleteForm = document.forms["formDeleteUser"];
     deleteForm.addEventListener("submit", ev => {
         ev.preventDefault();
-        fetch("http://localhost:8060/admin/del/" + deleteForm.id.value, {
+        fetch("http://localhost:8060/admin/delete/users/" + deleteForm.id.value, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(() => {
-                getAllUser();
+                getAllUsers();
                 $('#buttonDelFormClose').click();
 
             })
@@ -141,17 +171,18 @@ async function showDeleteModal(id) {
 
     let form = document.forms["formDeleteUser"];
     form.id.value = user.id;
-    form.firstName.value = user.firstName;
-    form.lastName.value = user.lastName;
+    form.username.value = user.username;
+    form.lastName.value = user.surname;
     form.age.value = user.age;
-    form.email.value = user.email;
+    form.city.value = user.city;
     form.password.value = user.password;
+
 
     $('#selectDelRoles').empty();
 
-    user.role.forEach(role => {
+    user.roles.forEach(role => {
         let el = document.createElement("option");
-        el.text = role.roleName.substring(5);
+        el.text = role.roleName.substring(0);
         el.value = role.id;
         $('#selectDelRoles')[0].appendChild(el);
     });
@@ -169,22 +200,24 @@ function updateUser() {
             })
         }
 
-        fetch("http://localhost:8060/admin/update/" + editForm.editId.value, {
-            method: 'PATCH',
+
+
+        fetch("http://localhost:8060/admin/update/users/" + editForm.editId.value, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 //id: editForm.editId.value,
-                firstName: editForm.firstNameEdit.value,
-                lastName: editForm.lastNameEdit.value,
-                age: editForm.ageEdit.value,
-                email: editForm.emailEdit.value,
+                username: editForm.nameEdit.value,
+                surname:  editForm.lastNameEdit.value,
+                age:      editForm.ageEdit.value,
+                city:     editForm.cityEdit.value,
                 password: editForm.passwordEdit.value,
-                role: editUserRoles
+                roles:     editUserRoles
             })
         }).then(() => {
-            getAllUser();
+            getAllUsers();
             $('#buttonEditFormClose').click();
         })
     })
@@ -201,13 +234,13 @@ async function showEditModal(id) {
 
     let form = document.forms["formEditUser"];
     form.editId.value = user.id;
-    form.firstNameEdit.value = user.firstName;
-    form.lastNameEdit.value = user.lastName;
+    form.nameEdit.value = user.username;
+    form.lastNameEdit.value = user.surname;
     form.ageEdit.value = user.age;
-    form.emailEdit.value = user.email;
+    form.cityEdit.value = user.city;
     form.passwordEdit.value = user.password;
 
-    $('#selectUpdateRoles').empty();
+   $('#selectUpdateRoles').empty();
 
     await fetch("http://localhost:8060/admin/roles")
         .then(response => response.json())
@@ -215,7 +248,7 @@ async function showEditModal(id) {
             roles.forEach(role => {
                 let el = document.createElement("option");
                 el.value = role.id;
-                el.text = role.roleName.substring(5);
+                el.text = role.roleName.substring(0);
                 $('#selectUpdateRoles')[0].appendChild(el);
             })
         })
