@@ -41,6 +41,7 @@ public class UserDaoImpl implements UserDao {
         entityManager.remove(getUserById(id));
     }
 
+
     @Override
     public User getUserByName(String name) {
         return entityManager.createQuery("select  u from User u where u.username = :name",User.class).

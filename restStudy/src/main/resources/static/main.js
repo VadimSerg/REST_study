@@ -21,7 +21,7 @@ async function getAuthUser() {
 
 
            $('#userName').append(fieldUser.username);
-         //  $('#userRole').append(fieldUser.roles[0].roleName.substring(0)+ "; "+ fieldUser.roles[1].roleName.substring(0));
+         //  $('#userRole').append(fieldUser.roles[0].roleName.substring(0)+ "; "+ fieldUser.roles[1].roleName.substring(0)); //здесь попытка найти решение , нащупывал решение
 
 
             // const arr =Array.of(fieldUser.roles.roleName.substring(0));

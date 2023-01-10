@@ -40,7 +40,7 @@ public class User implements UserDetails {
     @NotBlank(message = "password shouldn't be empty")
     private String password;
 
-    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
     @JoinTable(name ="user_roles" ,
             joinColumns =@JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -93,6 +93,15 @@ public class User implements UserDetails {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public User(@NotBlank(message = "Don't forget to input name") String username, @NotBlank(message = "Dont forget to input surname") String surname, @Min(0) @Max(120) @NotNull(message = "Age should be greater than 0") Integer age, @NotBlank(message = "city shouldn't be empty") String city, @NotBlank(message = "password shouldn't be empty") String password, Set<Role> roles) {
+        this.username = username;
+        this.surname = surname;
+        this.age = age;
+        this.city = city;
+        this.password = password;
+        this.roles = roles;
     }
 
     public User(Long id, @NotBlank(message = "Don't forget to input name") String username, @NotBlank(message = "Dont forget to input surname") String surname, @Min(0) @Max(120) @NotNull(message = "Age should be greater than 0") Integer age, @NotBlank(message = "city shouldn't be empty") String city, @NotBlank(message = "password shouldn't be empty") String password, Set<Role> roles) {
