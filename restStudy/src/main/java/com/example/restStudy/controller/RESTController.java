@@ -1,5 +1,6 @@
 package com.example.restStudy.controller;
 
+import com.example.restStudy.customsExceptions.UserNotFoundException;
 import com.example.restStudy.model.Role;
 import com.example.restStudy.model.User;
 import com.example.restStudy.service.RoleService;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
 
 @RestController
 @RequestMapping()
@@ -53,15 +55,11 @@ public class RESTController {
 
     @GetMapping("admin/users/{id}")
     @CrossOrigin
-    public ResponseEntity<?>  getUserById(@PathVariable("id") Long id) {
-//c @RequestBody User user этот код ломается
-       User user = userService.getUserById(id);
-        if (user==null) {
-            System.out.println("USER'S NOT FOUND");
-        }
+    public ResponseEntity<?>  getUserById(@PathVariable("id") Long id) throws UserNotFoundException {
+
+        User user = (User) userService.getUserById(id);
             return (user==null) ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>( user , HttpStatus.OK );
-
     }
 
 
@@ -77,7 +75,7 @@ public class RESTController {
 
 
     @PutMapping("admin/update/users/{id}")
-    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable("id") Long id) {
+    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable("id") Long id) throws UserNotFoundException {
         if(userService.getUserById(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -89,8 +87,8 @@ public class RESTController {
 
 
     @DeleteMapping("admin/delete/users/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id ) {
-        User user = userService.getUserById(id);
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id ) throws UserNotFoundException {
+        User user = (User) userService.getUserById(id);
             if(user == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
         userService.deleteUser(user);
         System.out.println("User WAS REMOVED");

@@ -20,8 +20,6 @@ public class LoginSuccessHandler  implements AuthenticationSuccessHandler {
                                         Authentication authentication) throws IOException, ServletException {
 
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-       //  response.sendRedirect(roles.contains("ROLE_ADMIN")? "/admin" : "/user");// с задания по бутсрапу
-
         response.sendRedirect(roles.contains("ROLE_ADMIN")? "/admin" : "/user");
     }
 }
