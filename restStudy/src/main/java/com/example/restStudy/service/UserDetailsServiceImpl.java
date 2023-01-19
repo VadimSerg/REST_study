@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.example.restStudy.dao.UserDao;
 
+import java.util.Optional;
+
 
 @Service(value="userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -19,13 +21,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       User myUser = userDao.getUserByName(username);
 
-       if (myUser==null) {
-           throw new UsernameNotFoundException("User " + username + " not found");
-       }
-
-       return  myUser;
-
+        return Optional.ofNullable(userDao.getUserByName(username)).orElseThrow(()->
+                new UsernameNotFoundException("User " + username + " not found"));
     }
 }
