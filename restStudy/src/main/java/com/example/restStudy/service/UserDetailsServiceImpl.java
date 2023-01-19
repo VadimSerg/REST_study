@@ -1,7 +1,4 @@
 package com.example.restStudy.service;
-
-
-import com.example.restStudy.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
