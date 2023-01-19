@@ -1,18 +1,17 @@
 package com.example.restStudy.service;
 
 import com.example.restStudy.customsExceptions.UserNotFoundException;
+import com.example.restStudy.dao.UserDao;
+import com.example.restStudy.model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.restStudy.dao.UserDao;
-import com.example.restStudy.model.User;
-
 
 import java.util.List;
 import java.util.Optional;
 
 @Service(value="userServiceImpl")
-@Transactional
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
@@ -26,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public void saveUser(User user) {
 
         System.out.println("************SAVING PROCESS********************************");
@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public User update(User user) {
        user.setPassword(passwordEncoder.encode(user.getPassword()));
        return userDao.update(user);
@@ -57,16 +58,19 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public void deleteUserById(Long id) {
         userDao.deleteById(id);
     }
 
     @Override
+    @Transactional
     public void deleteUser(User user) {
        userDao.delete(user);
     }
 
     @Override
+    @Transactional
     public User update(Long id) {
         return userDao.update(userDao.getUserById(id));
     }
