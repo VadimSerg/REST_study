@@ -1,4 +1,5 @@
 package com.example.restStudy.creatingTestUser;
+
 import com.example.restStudy.model.Role;
 import com.example.restStudy.model.User;
 import com.example.restStudy.service.RoleService;
