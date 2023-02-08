@@ -1,7 +1,8 @@
 package com.example.restStudy.dao;
 
-import org.springframework.stereotype.Component;
 import com.example.restStudy.model.User;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,6 +10,7 @@ import java.util.List;
 
 
 @Component
+@Repository
 public class UserDaoImpl implements UserDao {
 
     @PersistenceContext
@@ -32,24 +34,21 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User update(User user) {
+
         entityManager.merge(user);
         return user;
     }
 
     @Override
-    public void deleteById(long id) {
-        entityManager.remove(getUserById(id));
-    }
-
-
-    @Override
     public User getUserByName(String name) {
-        return entityManager.createQuery("select  u from User u join fetch u.roles  where u.username = :name  ",User.class).
+        return entityManager.createQuery("select  u from User u join fetch u.roles  " +
+                "where u.username = :name  ",User.class).
                 setParameter("name",name).getSingleResult();
     }
 
     @Override
     public void delete(User user) {
+
         entityManager.remove(user);
     }
 }

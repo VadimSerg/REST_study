@@ -1,13 +1,15 @@
 package com.example.restStudy.dao;
 
-import org.springframework.stereotype.Component;
 import com.example.restStudy.model.Role;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Component
+@Repository
 public class RoleDaoImpl  implements RoleDao  {
 
     @PersistenceContext
@@ -47,10 +49,4 @@ public class RoleDaoImpl  implements RoleDao  {
                 createQuery("select r from Role r where r.roleName =:role" ,Role.class).
                 setParameter("role",name).getSingleResult();
     }
-
-
-
-
-
-
 }

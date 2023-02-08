@@ -45,8 +45,6 @@ public class User implements UserDetails {
             joinColumns =@JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
 
-    //  @NotEmpty(message = "SET shouldn't be empty")
-    //  @Valid
     private Set<Role> roles = new HashSet<>();
 
 
@@ -180,16 +178,13 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
         Set<SimpleGrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (Role role:roles) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-        }
+            for (Role role:roles) {
+                grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+            }
 
 
         return grantedAuthorities;
-
-       // return  getRoles();
     }
 
     @Override
