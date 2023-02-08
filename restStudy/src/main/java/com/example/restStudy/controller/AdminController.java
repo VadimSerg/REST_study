@@ -65,7 +65,6 @@ public class AdminController {
     public ResponseEntity<?> addNewUser(@RequestBody User user) {
 
         userService.saveUser(user);
-        System.out.println("USER'S SAVED SUCCESSFULLY");
         return new ResponseEntity<>(user,HttpStatus.CREATED);
 
     }
@@ -85,9 +84,10 @@ public class AdminController {
     @DeleteMapping("admin/delete/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id ) throws UserNotFoundException {
         User user = userService.getUserById(id);
-            if(user == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
+            if(user == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         userService.deleteUser(user);
-        System.out.println("User WAS REMOVED");
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
