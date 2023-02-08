@@ -8,25 +8,22 @@ import com.example.restStudy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 import java.util.List;
 
 
 @RestController
 @RequestMapping()
-public class RESTController {
+public class AdminController {
 
     private final UserService userService;
-    private final UserDetailsService userDetailsService;
     private final RoleService roleService;
 
     @Autowired
-    public RESTController(UserService userService, UserDetailsService userDetailsService, RoleService roleService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService= userService;
-        this.userDetailsService = userDetailsService;
         this.roleService = roleService;
     }
 
@@ -57,7 +54,7 @@ public class RESTController {
     @CrossOrigin
     public ResponseEntity<?>  getUserById(@PathVariable("id") Long id) throws UserNotFoundException {
 
-        User user = (User) userService.getUserById(id);
+        User user = userService.getUserById(id);
             return (user==null) ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>( user , HttpStatus.OK );
     }
@@ -81,29 +78,26 @@ public class RESTController {
         }
         user.setId(id);
         userService.update(user);
-        System.out.println("USER'S CHANGED SUCCESSUllY");
         return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
     }
 
 
     @DeleteMapping("admin/delete/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id ) throws UserNotFoundException {
-        User user = (User) userService.getUserById(id);
+        User user = userService.getUserById(id);
             if(user == null) { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
         userService.deleteUser(user);
         System.out.println("User WAS REMOVED");
         return new ResponseEntity<>(user, HttpStatus.OK);
-
     }
-
-
-
 
     @GetMapping("/user/auth")
-    public ResponseEntity<?> showUser(@AuthenticationPrincipal UserDetails loggedInUser) {
-        User user = (User) userDetailsService.loadUserByUsername(loggedInUser.getUsername());
+    public ResponseEntity<?> showLoggedUser(Principal principal) throws UserNotFoundException {
+        User user = userService.getUserByName(principal.getName());
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
+
+
 
 
 }

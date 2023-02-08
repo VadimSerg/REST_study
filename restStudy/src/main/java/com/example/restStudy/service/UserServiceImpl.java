@@ -27,8 +27,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void saveUser(User user) {
-
-        System.out.println("************SAVING PROCESS********************************");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.save(user);
         System.out.println("User with ID:" + user.getId() + " was saved");
@@ -56,13 +54,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-
-    @Override
-    @Transactional
-    public void deleteUserById(Long id) {
-        userDao.deleteById(id);
-    }
-
     @Override
     @Transactional
     public void deleteUser(User user) {
@@ -73,6 +64,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User update(Long id) {
         return userDao.update(userDao.getUserById(id));
+    }
+
+    @Override
+    public User getUserByName(String name) throws UserNotFoundException {
+        Optional<User> optionalUser = Optional.ofNullable(userDao.getUserByName(name));
+        return optionalUser.orElseThrow(()-> new UserNotFoundException("User with id = "+ name +  " not found"));
     }
 
 

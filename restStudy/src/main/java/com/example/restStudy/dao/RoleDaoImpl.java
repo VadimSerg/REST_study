@@ -49,10 +49,4 @@ public class RoleDaoImpl  implements RoleDao  {
                 createQuery("select r from Role r where r.roleName =:role" ,Role.class).
                 setParameter("role",name).getSingleResult();
     }
-
-
-
-
-
-
 }
