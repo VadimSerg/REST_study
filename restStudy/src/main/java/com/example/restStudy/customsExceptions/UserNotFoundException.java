@@ -2,7 +2,6 @@ package com.example.restStudy.customsExceptions;
 
 public class UserNotFoundException extends Exception   {
 
-
     private final String message;
 
 

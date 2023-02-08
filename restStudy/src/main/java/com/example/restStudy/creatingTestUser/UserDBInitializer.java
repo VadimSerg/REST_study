@@ -39,7 +39,7 @@ public class UserDBInitializer {
             roleService.saveRole(new Role("ROLE_USER"));
         }
 
-         if (!allRolesInDb.contains(roleService.getRoleByName("ROLE_ADMIN")))  {
+         if (!allRolesInDb.contains(roleAdmin))  {
               roleService.saveRole(new Role("ROLE_ADMIN"));
          }
 
