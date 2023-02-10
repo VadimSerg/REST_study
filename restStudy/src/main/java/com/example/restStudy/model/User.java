@@ -3,7 +3,6 @@ package com.example.restStudy.model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
@@ -33,80 +32,41 @@ public class User implements UserDetails {
     private Long id;
 
 
-    @Column(name="username")
+    @Column(name = "username")
     @NotBlank(message = "Don't forget to input name")
     private String username;
 
 
-    @Column(name= "surname")
+    @Column(name = "surname")
     @NotBlank(message = "Dont forget to input surname")
     private String surname;
 
-    @Column(name="age")
-    @Min(0) @Max(120) @NotNull(message ="Age should be greater than 0")
+    @Column(name = "age")
+    @Min(0)
+    @Max(120)
+    @NotNull(message = "Age should be greater than 0")
     private Integer age;
 
 
-    @Column(name="city")
+    @Column(name = "city")
     @NotBlank(message = "city shouldn't be empty")
-    private  String city;
+    private String city;
 
-    @Column(name ="password")
+    @Column(name = "password")
     @NotBlank(message = "password shouldn't be empty")
     private String password;
 
-    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
-    @JoinTable(name ="user_roles" ,
-            joinColumns =@JoinColumn(name = "user_id"),
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
 
     private Set<Role> roles = new HashSet<>();
 
 
-
     public User() {
     }
 
-
-    public long getId() {
-         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return username ;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
 
     public User(@NotBlank(message = "Don't forget to input name") String username, @NotBlank(message = "Dont forget to input surname") String surname, @Min(0) @Max(120) @NotNull(message = "Age should be greater than 0") Integer age, @NotBlank(message = "city shouldn't be empty") String city, @NotBlank(message = "password shouldn't be empty") String password, Set<Role> roles) {
         this.username = username;
@@ -135,6 +95,45 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return username;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -162,14 +161,6 @@ public class User implements UserDetails {
         return result;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
@@ -177,7 +168,6 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
 
     @Override
     public String toString() {
@@ -192,9 +182,9 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> grantedAuthorities = new HashSet<>();
-            for (Role role:roles) {
-                grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-            }
+        for (Role role : roles) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+        }
 
 
         return grantedAuthorities;
@@ -205,9 +195,17 @@ public class User implements UserDetails {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override

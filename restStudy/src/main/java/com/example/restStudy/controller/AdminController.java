@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.security.Principal;
 import java.util.List;
 
@@ -31,56 +30,53 @@ public class AdminController {
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService) {
-        this.userService= userService;
+        this.userService = userService;
         this.roleService = roleService;
     }
 
     @CrossOrigin
     @GetMapping("admin/users")
 
-    public ResponseEntity< List<User>> getUsers() {
+    public ResponseEntity<List<User>> getUsers() {
         final List<User> allUsers = userService.getAll();
-        return allUsers!=null && !allUsers.isEmpty() ?
-                new ResponseEntity<>(allUsers,HttpStatus.OK) :
+        return allUsers != null && !allUsers.isEmpty() ?
+                new ResponseEntity<>(allUsers, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 
 
     @GetMapping("admin/roles")
-    public ResponseEntity< List<Role>> getRoles() {
-        final List <Role> allRoles= roleService.getAllRoles();
-        return allRoles!=null && !allRoles.isEmpty() ?
-                new ResponseEntity<>(allRoles,HttpStatus.OK) :
+    public ResponseEntity<List<Role>> getRoles() {
+        final List<Role> allRoles = roleService.getAllRoles();
+        return allRoles != null && !allRoles.isEmpty() ?
+                new ResponseEntity<>(allRoles, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
-
-
     @GetMapping("admin/users/{id}")
     @CrossOrigin
-    public ResponseEntity<?>  getUserById(@PathVariable("id") Long id) throws UserNotFoundException {
+    public ResponseEntity<?> getUserById(@PathVariable("id") Long id) throws UserNotFoundException {
 
         User user = userService.getUserById(id);
-            return (user==null) ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-            new ResponseEntity<>( user , HttpStatus.OK );
+        return (user == null) ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                new ResponseEntity<>(user, HttpStatus.OK);
     }
-
 
 
     @PostMapping("admin/users")
     public ResponseEntity<?> addNewUser(@RequestBody User user) {
 
         userService.saveUser(user);
-        return new ResponseEntity<>(user,HttpStatus.CREATED);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
 
     }
 
 
     @PutMapping("admin/update/users/{id}")
     public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable("id") Long id) throws UserNotFoundException {
-        if(userService.getUserById(id) == null) {
+        if (userService.getUserById(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         user.setId(id);
@@ -90,11 +86,11 @@ public class AdminController {
 
 
     @DeleteMapping("admin/delete/users/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id ) throws UserNotFoundException {
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) throws UserNotFoundException {
         User user = userService.getUserById(id);
-            if(user == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         userService.deleteUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -102,7 +98,7 @@ public class AdminController {
     @GetMapping("/user/auth")
     public ResponseEntity<?> showLoggedUser(Principal principal) throws UserNotFoundException {
         User user = userService.getUserByName(principal.getName());
-        return new ResponseEntity<>(user,HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 }

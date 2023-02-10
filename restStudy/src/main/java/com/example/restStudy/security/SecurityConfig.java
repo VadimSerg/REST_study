@@ -20,9 +20,9 @@ import com.example.restStudy.security.handler.LoginSuccessHandler;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
-    private  final LoginSuccessHandler loginSuccessHandler;
+    private final LoginSuccessHandler loginSuccessHandler;
 
-   @Autowired
+    @Autowired
     public SecurityConfig(@Qualifier("userDetailsService") UserDetailsService userDetailsService, LoginSuccessHandler loginSuccessHandler) {
         this.userDetailsService = userDetailsService;
         this.loginSuccessHandler = loginSuccessHandler;
@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-       auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login? logout")
                 .and().csrf().disable();
 
-        http  .authorizeRequests()
+        http.authorizeRequests()
                 .antMatchers("/login").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasAnyRole("USER")
@@ -51,15 +51,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login").usernameParameter("j_username").passwordParameter("j_password").permitAll();
 
 
-
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-         return  new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
 
     }
-
 
 
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Component
 @Repository
-public class RoleDaoImpl  implements RoleDao  {
+public class RoleDaoImpl implements RoleDao {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -21,19 +21,19 @@ public class RoleDaoImpl  implements RoleDao  {
 
     }
 
-    public List <Role> getAllRoles() {
+    public List<Role> getAllRoles() {
 
-        return   entityManager.createQuery("select r  from  Role r ",Role.class).getResultList();
+        return entityManager.createQuery("select r  from  Role r ", Role.class).getResultList();
 
     }
 
 
     public Role getRoleById(long id) {
 
-        return  entityManager.find(Role.class, id);
+        return entityManager.find(Role.class, id);
     }
 
-    public void  update(Role role) {
+    public void update(Role role) {
 
         entityManager.merge(role);
     }
@@ -45,8 +45,8 @@ public class RoleDaoImpl  implements RoleDao  {
     }
 
     public Role getAuthorityByName(String name) {
-        return  entityManager.
-                createQuery("select r from Role r where r.roleName =:role" ,Role.class).
-                setParameter("role",name).getSingleResult();
+        return entityManager.
+                createQuery("select r from Role r where r.roleName =:role", Role.class).
+                setParameter("role", name).getSingleResult();
     }
 }

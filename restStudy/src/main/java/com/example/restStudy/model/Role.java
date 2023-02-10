@@ -19,10 +19,23 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name ="role")
+    @Column(name = "role")
     @NotEmpty(message = "Don't forget to input role name")
-    private  String roleName;
+    private String roleName;
 
+
+    public Role(Long id, String roleName) {
+        this.id = id;
+        this.roleName = roleName;
+    }
+
+    public Role(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public Role() {
+
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -36,19 +49,6 @@ public class Role implements GrantedAuthority {
     public int hashCode() {
         return Objects.hash(id, roleName);
     }
-
-    public Role(Long id, String roleName) {
-        this.id = id;
-        this.roleName = roleName;
-    }
-    public Role(String roleName) {
-        this.roleName =roleName;
-    }
-
-    public Role() {
-
-    }
-
 
     public Long getId() {
         return id;

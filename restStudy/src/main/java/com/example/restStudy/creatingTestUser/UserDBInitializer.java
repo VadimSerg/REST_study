@@ -24,28 +24,25 @@ public class UserDBInitializer {
     }
 
 
-
-
-
     @PostConstruct
-    public void createTestUser()  {
+    public void createTestUser() {
 
         List<Role> allRolesInDb = roleService.getAllRoles();
         Role roleAdmin = roleService.getRoleByName("ROLE_ADMIN");
         Role roleUser = roleService.getRoleByName("ROLE_USER");
         Set<Role> roleSet = new HashSet<>();
 
-        if (!allRolesInDb.contains(roleUser))   {
+        if (!allRolesInDb.contains(roleUser)) {
             roleService.saveRole(new Role("ROLE_USER"));
         }
 
-         if (!allRolesInDb.contains(roleAdmin))  {
-              roleService.saveRole(new Role("ROLE_ADMIN"));
-         }
+        if (!allRolesInDb.contains(roleAdmin)) {
+            roleService.saveRole(new Role("ROLE_ADMIN"));
+        }
 
-         roleSet.add(roleUser);
-         roleSet.add(roleAdmin);
-         User user =  new User("VolodyTest","TestSurname",13,"Testcity", "2222",roleSet);
-         userService.saveUser(user);
+        roleSet.add(roleUser);
+        roleSet.add(roleAdmin);
+        User user = new User("VolodyTest", "TestSurname", 13, "Testcity", "2222", roleSet);
+        userService.saveUser(user);
     }
 }
